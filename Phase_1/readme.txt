@@ -2,6 +2,7 @@ Simple Client-Server Chat Application
 
 - only one client
 - only one message can be sent each time by the client
+- server sends the first message
 
 ======================================
 running the code
@@ -59,10 +60,11 @@ Server (server.py)
 
 3. **Sending a Welcome Message**
 
-    client_socket.send("You have connected to the server".encode("utf-8"))
+    client_socket.send("\n* hello client *\n********************\n".encode("utf-8"))
 
     - This informs the client of a successful connection.
     - Messages must be encoded before sending (UTF-8 is used by default).
+    - there is a same message from client sent to server "\n* Hello server *\n********************\n"
 
 4. **Handling Continuous Communication**
 
@@ -77,10 +79,10 @@ Server (server.py)
 
 5. **Handling Messages with If-Else**
 
-    if message.lower() == "quit":
+    if message.lower() == "/exit":
         server_socket.close()
 
-        - If the message is "quit", the connection is closed.
+        - If the message is "/exit", the connection is closed.
 
     else:
 
@@ -88,7 +90,7 @@ Server (server.py)
         message = input("Message: ")
         client_socket.send(message.encode("utf-8"))
 
-        - If the message isn't "quit", it is displayed in blue.
+        - If the message isn't "/exit", it is displayed in blue.
         - The user enters a response, which is sent to the client.
 
 ======================================

@@ -10,6 +10,9 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 #connecting to the server with specified ip address (your computer ip) and port number
 client_socket.connect((socket.gethostbyname(socket.gethostname()), 12345))
+client_socket.send("\n* Hello server *\n********************\n".encode("utf-8"))
+message = client_socket.recv(1024).decode("utf-8")
+print(message)
 
 #infinite loop for sending and receiving messages
 while True:
@@ -18,8 +21,8 @@ while True:
     message = client_socket.recv(1024).decode("utf-8")
 
     # quiting if the connected client wants to quit else keep sending messages
-    if message.lower() == "quit":
-        client_socket.send("quit".encode("utf-8"))
+    if message.lower() == "/exit":
+        client_socket.send("/exit".encode("utf-8"))
         print("ending the chat", end=" ")
         time.sleep(0.5)
         print(". ", end="")
@@ -36,3 +39,4 @@ while True:
 
 #if we quit from the server
 client_socket.close()
+print("\nconnection closed successfully")

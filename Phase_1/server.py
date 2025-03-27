@@ -21,7 +21,7 @@ print("waiting for a connection...")
 client_socket, client_address = server_socket.accept()
 
 #send some information to the client so they know that they have successfully connected
-client_socket.send("you have connected to the server".encode("utf-8"))
+client_socket.send("\n* hello client *\n********************\n".encode("utf-8"))
 
 #infinite loop for sending and receiving messages
 while True:
@@ -30,8 +30,8 @@ while True:
     message = client_socket.recv(1024).decode("utf-8")
 
     # quiting if the connected client wants to quit else keep sending messages
-    if message.lower() == "quit":
-        client_socket.send("quit".encode("utf-8"))
+    if message.lower() == "/exit":
+        client_socket.send("/exit".encode("utf-8"))
         print("ending the chat",end=" ")
         time.sleep(0.5)
         print(". ",end="")
@@ -48,4 +48,5 @@ while True:
 
 #closing the server socket
 server_socket.close()
+print("\nconnection closed successfully")
 

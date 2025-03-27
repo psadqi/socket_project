@@ -3,6 +3,7 @@ import socket
 
 #just for fun
 import time
+import termcolor
 
 #creating the server socket IPV4 (AF_INET) and TCP (SOCK_STREAM)
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -40,7 +41,7 @@ while True:
         print(". ", end="")
         break
     else:
-        print(message)
+        print(termcolor.colored(message, "blue"))
         message = input("message: ")
         client_socket.send(message.encode("utf-8"))
 

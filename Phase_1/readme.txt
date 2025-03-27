@@ -1,5 +1,8 @@
 Simple Client-Server Chat Application
 
+- only one client
+- only one message can be sent each time by the client
+
 ======================================
 running the code
 ======================================

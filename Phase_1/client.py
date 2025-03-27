@@ -29,7 +29,8 @@ while True:
         print(". ", end="")
         break
     else:
-        print(termcolor.colored(message, "green"))
+        #print(termcolor.colored(message, "green"))
+        print(message)
         message = input("message: ")
         client_socket.send(message.encode("utf-8"))
 

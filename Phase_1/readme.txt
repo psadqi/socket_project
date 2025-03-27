@@ -17,6 +17,9 @@ running the code
   - run cmd twice in the directory first run server.py file using " py server.py " command and after that
     run client.py in the second cmd using " py client.py "
 
+  - !!! if you are using cmd it doesnt support the color !!! 
+	- comment the print function that has color in the loop and remove the simple print out of comment
+
 ======================================
 Required Module
 ======================================

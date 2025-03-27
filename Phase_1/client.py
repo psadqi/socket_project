@@ -11,14 +11,14 @@ client_socket.connect((socket.gethostbyname(socket.gethostname()), 12345))
 while True:
 
     # receiving information from the server (buffer size is 1024)
-    message = client_socket.recv(1024)
+    message = client_socket.recv(1024).decode("utf-8")
 
     # quiting if the connected client wants to quit else keep sending messages
     if message.lower() == "quit":
-        client_socket.send(b"quit")
+        client_socket.send("quit".encode("utf-8"))
         break
     else:
-        print(str(message)[2:-1])
+        print(message)
         message = input("message: ")
         client_socket.send(message.encode("utf-8"))
 

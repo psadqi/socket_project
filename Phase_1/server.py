@@ -1,6 +1,9 @@
 #importing the socket module
 import socket
 
+#just for fun
+import time
+
 #creating the server socket IPV4 (AF_INET) and TCP (SOCK_STREAM)
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -28,9 +31,16 @@ while True:
     # quiting if the connected client wants to quit else keep sending messages
     if message.lower() == "quit":
         client_socket.send("quit".encode("utf-8"))
+        print("ending the chat",end=" ")
+        time.sleep(0.5)
+        print(". ",end="")
+        time.sleep(0.5)
+        print(". ", end="")
+        time.sleep(0.5)
+        print(". ", end="")
         break
     else:
-        print(str(message)[2:-1])
+        print(message)
         message = input("message: ")
         client_socket.send(message.encode("utf-8"))
 

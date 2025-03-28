@@ -13,10 +13,13 @@ server_socket.listen()
 #a dictionary for clients
 clients = dict()
 
+
 def show_message(message):
     """show the messages for everyone"""
     for client in clients.keys():
         client.send(message)
+
+
 
 def receive_message(client_socket):
     """receive message from client"""
@@ -24,7 +27,6 @@ def receive_message(client_socket):
 
         # we need a try except so that our program doesn't crash
         try:
-
             #receive the message from the client
             message = client_socket.recv(1024).decode("utf-8")
             message = f"\033[1;34m\n\t{clients[client_socket]}: {message}\n\033[0m".encode("utf-8")
@@ -33,7 +35,7 @@ def receive_message(client_socket):
             show_message(message)
 
         except:
-
+            #name of client
             name = clients[client_socket]
 
             #remove the client from the dictionary

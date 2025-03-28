@@ -12,9 +12,25 @@ server_socket.listen()
 #a dictionary for clients
 clients = {}
 
-def receive():
-    pass
-
 
 def connect():
-    pass
+    """connecting method"""
+
+    while True:
+
+        #accept incoming connections
+        client_socket, client_address = server_socket.accept()
+        print(f"connected to {client_address}")
+
+        #request for client name
+        client_socket.send(f"what is your name?\n".encode('utf-8'))
+        client_name = client_socket.recv(1024).decode('utf-8')
+
+        #adding the client to dictionary
+        clients[client_socket] = client_name
+        print(f"new client: {clients[client_socket]}")
+
+
+        #informing the client
+        client_socket.send(f"{clients[client_socket]}, you are connected to the server\n".encode('utf-8'))
+

@@ -11,9 +11,11 @@ client_socket.connect((socket.gethostbyname(socket.gethostname()), 12345))
 def send_message():
     """sending message to server"""
     while True:
-
         #getting the message and send it
         message = input("")
+        if message == "/exit":
+            client_socket.close()
+            break
         client_socket.send(message.encode("utf-8"))
 
 
@@ -36,7 +38,7 @@ def receive_message():
 
         #if there was an error
         except:
-            print("ERROR!")
+            print("disconnected!")
             client_socket.close()
             break
 

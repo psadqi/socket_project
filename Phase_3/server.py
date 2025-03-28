@@ -22,32 +22,33 @@ def broadcast(message):
         client.send(message)
 
 
-
 def receive_message(client_socket):
     """receive message from client"""
+
     while True:
         address = str(client_socket)[-26:-3]
         # we need a try except so that our program doesn't crash
         try:
             #receive the message from the client
             message = client_socket.recv(1024).decode("utf-8")
-            message = f"\033[1;34m\n\t{clients[client_socket]} ({address}): {message}\n\033[0m".encode("utf-8")
+            if message.lower() == "/exit":
+                raise Exception("Client requested to disconnect")  # This will trigger the except block
+            message = f"\033[1;34m\n\t{clients[client_socket]} ({address}) {message}\n\033[0m".encode("utf-8")
             #show the message to everyone
             broadcast(message)
-
         except:
             #name of client
             name = clients[client_socket]
-
             #remove the client from the dictionary
             clients.pop(client_socket)
-
             #close the connection for the client
             client_socket.close()
-
             #let others know that the client left the server
             broadcast(f"\033[1;31m\n\t{name} ({address}) has left the server\n\033[0m".encode("utf-8"))
             leave_message(name, address)
+            print("*" * 30)
+            if not clients:
+                exit()
             break
 
 
@@ -58,6 +59,7 @@ def connect_client():
         #accept incoming connections
         client_socket, client_address = server_socket.accept()
         print(f"connected to {client_address}")
+        print("*" * 30)
 
         #request for client name
         client_socket.send(f"what is your name? ".encode('utf-8'))
@@ -65,7 +67,8 @@ def connect_client():
 
         #adding the client to dictionary
         clients.update({client_socket: client_name})
-        print(f"new client: {clients[client_socket]}")
+        print(f"client name: {clients[client_socket]}")
+        print("*" * 30)
 
         #informing the client
         client_socket.send(f"\nwelcome {clients[client_socket]}, you are connected to the server\n".encode('utf-8'))
@@ -80,6 +83,5 @@ print()
 print("*" * 30)
 print("server is looking for connection...")
 print("*" * 30)
-print()
 connect_client()
 

@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a51d5054-55bb-4061-a40d-1971f76148c7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/socket_programming.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/socket_programming.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Phase_2/client.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Phase_2/readme..txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Phase_2/server.py" beforeDir="false" />
-    </list>
+    <list default="true" id="a51d5054-55bb-4061-a40d-1971f76148c7" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -227,6 +221,7 @@
       <workItem from="1743190846732" duration="45000" />
       <workItem from="1743190979990" duration="1770000" />
       <workItem from="1743192771908" duration="56000" />
+      <workItem from="1743192917885" duration="313000" />
     </task>
     <servers />
   </component>

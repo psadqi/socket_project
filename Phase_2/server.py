@@ -23,7 +23,7 @@ def connect():
         print(f"connected to {client_address}")
 
         #request for client name
-        client_socket.send(f"what is your name?\n".encode('utf-8'))
+        client_socket.send(f"what is your name? ".encode('utf-8'))
         client_name = client_socket.recv(1024).decode('utf-8')
 
         #adding the client to dictionary
@@ -32,5 +32,12 @@ def connect():
 
 
         #informing the client
-        client_socket.send(f"{clients[client_socket]}, you are connected to the server\n".encode('utf-8'))
+        client_socket.send(f"welcome {clients[client_socket]}, you are connected to the server\n".encode('utf-8'))
+
+print()
+print("*"*30)
+print("server is looking for connection")
+print("*"*30)
+print()
+connect()
 

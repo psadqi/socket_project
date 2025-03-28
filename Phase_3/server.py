@@ -47,8 +47,6 @@ def receive_message(client_socket):
             broadcast(f"\033[1;31m\n\t{name} ({address}) has left the server\n\033[0m".encode("utf-8"))
             leave_message(name, address)
             print("*" * 30)
-            if not clients:
-                exit()
             break
 
 

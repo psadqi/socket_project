@@ -26,9 +26,7 @@ def receive():
                 print("*"*30)
                 print()
                 client_socket.send(name.encode("utf-8"))
-            elif message.lower() == "/exit":
-                client_socket.close()
-                break
+
             else:
                 print(message)
 

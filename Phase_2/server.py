@@ -12,9 +12,15 @@ server_socket.listen()
 #a dictionary for clients
 clients = {}
 
+def noting():
+    print()
+    print("*" * 30)
+    print("server is looking for connection...")
+    print("*" * 30)
+    print()
 
 def connect():
-    """connecting method"""
+    """connecting to server"""
 
     while True:
 
@@ -30,14 +36,10 @@ def connect():
         clients[client_socket] = client_name
         print(f"new client: {clients[client_socket]}")
 
-
         #informing the client
         client_socket.send(f"welcome {clients[client_socket]}, you are connected to the server\n".encode('utf-8'))
 
-print()
-print("*"*30)
-print("server is looking for connection")
-print("*"*30)
-print()
+#set up the server
+noting()
 connect()
 

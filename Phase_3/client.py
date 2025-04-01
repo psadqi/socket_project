@@ -7,17 +7,16 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 #connecting to the server with specified ip address (your computer ip) and port number
 client_socket.connect((socket.gethostbyname(socket.gethostname()), 12345))
 
+
 def get_username():
-    x=client_socket.recv(1024).decode("utf-8")
-    try:
-        if x == "gdkjwf;kja;flkjdf":
-            print("please enter your username: ", end="")
-            name = input()
-            client_socket.send(name.encode("utf-8"))
-            return 0
-    except:
-        client_socket.close()
+    message = client_socket.recv(1024).decode("utf-8")
+    if message == "username":
+        print("please enter your username: ", end="")
+        name = input()
+        client_socket.send(name.encode("utf-8"))
         return 0
+
+
 
 def send_message():
     """sending message to server"""
@@ -33,7 +32,6 @@ def send_message():
 def receive_message():
     """receiving message from server"""
     while True:
-
         #we need a try except so that our program doesn't crash
         try:
             # receiving information from the server (buffer size is 1024)
@@ -41,7 +39,7 @@ def receive_message():
             print(message)
         #if there was an error
         except:
-            print("disconnected!")
+            print("disconnected!",end="")
             client_socket.close()
             break
 

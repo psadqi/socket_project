@@ -59,22 +59,28 @@ def connect_client():
         print(f"connected to {client_address}")
         print("*" * 30)
 
-        #request for client name
-        client_socket.send(f"gdkjwf;kja;flkjdf".encode('utf-8'))
-        client_name = client_socket.recv(1024).decode('utf-8')
+        try:
 
-        #adding the client to dictionary
-        clients.update({client_socket: client_name})
-        print(f"client name: {clients[client_socket]}")
-        print("*" * 30)
+            #request for client name
+            client_socket.send(f"username".encode('utf-8'))
+            client_name = client_socket.recv(1024).decode('utf-8')
 
-        #informing the client
-        client_socket.send(f"\nwelcome {clients[client_socket]}, you are connected to the server\n".encode('utf-8'))
-        broadcast(f"\033[1;92m\n{clients[client_socket]} has joined the server[1;92m\n\033[0m".encode("utf-8"))
+            #adding the client to dictionary
+            clients.update({client_socket: client_name})
+            print(f"client name: {clients[client_socket]}")
+            print("*" * 30)
+
+            #informing the client
+            client_socket.send(f"\nwelcome {clients[client_socket]}, you are connected to the server\n".encode('utf-8'))
+            broadcast(f"\033[1;92m\n{clients[client_socket]} has joined the server\n\033[0m".encode("utf-8"))
+
+        except:
+            continue
 
         #when a client connects to the server stat a thread
         receive_thread = threading.Thread(target=receive_message, args=(client_socket,))
         receive_thread.start()
+
 
 #set up the server
 print()

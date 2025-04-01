@@ -33,7 +33,7 @@ def receive_message(client_socket):
             message = client_socket.recv(1024).decode("utf-8")
             if message.lower() == "/exit":
                 raise Exception("Client requested to disconnect")  # This will trigger the except block
-            message = f"\033[1;34m\n\t{clients[client_socket]} ({address}) {message}\n\033[0m".encode("utf-8")
+            message = f"\033[1;34m\n\t{clients[client_socket]} ({address}): {message}\n\033[0m".encode("utf-8")
             #show the message to everyone
             broadcast(message)
         except:
@@ -60,7 +60,8 @@ def connect_client():
         print("*" * 30)
 
         #request for client name
-        client_socket.send(f"what is your name? ".encode('utf-8'))
+        username_code = "ajlskdfdfdfjaslfkj"
+        client_socket.send(f"ajlskdfdfdfjaslfkj".encode('utf-8'))
         client_name = client_socket.recv(1024).decode('utf-8')
 
         #adding the client to dictionary

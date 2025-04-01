@@ -15,6 +15,8 @@ Running the Code
 3. **Send Messages**: Clients can send messages, which will be broadcasted to all connected clients.
 4. **Exit the Chat**: Clients can leave by typing `/exit`, and the server will notify others.
 
+*** you must enter the username of a client then a new client can enter username and start sending message***
+
 ======================================
 Required Modules
 ======================================

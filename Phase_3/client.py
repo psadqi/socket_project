@@ -7,6 +7,12 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 #connecting to the server with specified ip address (your computer ip) and port number
 client_socket.connect((socket.gethostbyname(socket.gethostname()), 12345))
 
+def get_username():
+    message = client_socket.recv(1024).decode()
+    print("please enter your username: ", end="")
+    name = input()
+    client_socket.send(name.encode("utf-8"))
+    return 0
 
 def send_message():
     """sending message to server"""
@@ -29,10 +35,11 @@ def receive_message():
             message = client_socket.recv(1024).decode("utf-8")
 
             #name request
-            if message == "what is your name? ":
-                name = input("please enter your name: ")
+            if message == "ajlskdfdfdfjaslfkj":
+                print("please enter your username: ",end="")
+                name = input()
                 client_socket.send(name.encode("utf-8"))
-
+                return 0
             else:
                 print(message)
 
@@ -48,5 +55,6 @@ receive_thread = threading.Thread(target=receive_message)
 send_thread = threading.Thread(target=send_message)
 
 #starting the send and receiving functions
+get_username()
 receive_thread.start()
 send_thread.start()

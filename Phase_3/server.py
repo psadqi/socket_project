@@ -13,8 +13,6 @@ server_socket.listen()
 #a dictionary for clients
 clients = dict()
 
-def leave_message(name,address):
-    print(f"{name} ({address}) has left the server")
 
 def broadcast(message):
     """show the messages for everyone"""
@@ -32,7 +30,7 @@ def receive_message(client_socket):
             #receive the message from the client
             message = client_socket.recv(1024).decode("utf-8")
             if message.lower() == "/exit":
-                raise Exception("Client requested to disconnect")  # This will trigger the except block
+                raise Exception
             message = f"\033[1;34m\n\t{clients[client_socket]} ({address}): {message}\n\033[0m".encode("utf-8")
             #show the message to everyone
             broadcast(message)
@@ -44,8 +42,8 @@ def receive_message(client_socket):
             #close the connection for the client
             client_socket.close()
             #let others know that the client left the server
-            broadcast(f"\033[1;31m\n\t{name} ({address}) has left the server\n\033[0m".encode("utf-8"))
-            leave_message(name, address)
+            broadcast(f"\033[1;31m\n\t{name} ({address}) has left the server!\n\033[0m".encode("utf-8"))
+            print(f"{name} ({address}) has left the server.")
             print("*" * 30)
             break
 
@@ -56,7 +54,7 @@ def connect_client():
 
         #accept incoming connections
         client_socket, client_address = server_socket.accept()
-        print(f"connected to {client_address}")
+        print(f"{client_address} has connected.")
         print("*" * 30)
 
         try:
@@ -66,15 +64,22 @@ def connect_client():
             client_name = client_socket.recv(1024).decode('utf-8')
 
             #adding the client to dictionary
-            clients.update({client_socket: client_name})
-            print(f"client name: {clients[client_socket]}")
-            print("*" * 30)
+            if len(client_name) != 0:
 
-            #informing the client
-            client_socket.send(f"\nwelcome {clients[client_socket]}, you are connected to the server\n".encode('utf-8'))
-            broadcast(f"\033[1;92m\n{clients[client_socket]} has joined the server\n\033[0m".encode("utf-8"))
+                clients.update({client_socket: client_name})
+                print(f"client: {clients[client_socket]} {str(client_socket)[-27:-1]}")
+                print("*" * 30)
+
+                #informing the client
+                client_socket.send(f"\nwelcome {clients[client_socket]}, you are connected to the server.\n".encode('utf-8'))
+                broadcast(f"\033[1;92m\n{clients[client_socket]} has joined the server.\n\033[0m".encode("utf-8"))
+            else:
+                raise Exception
 
         except:
+
+            print(f"({str(client_socket)[-25:-2]}) has left the server.")
+            print("*" * 30)
             continue
 
         #when a client connects to the server stat a thread

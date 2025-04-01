@@ -60,8 +60,7 @@ def connect_client():
         print("*" * 30)
 
         #request for client name
-        username_code = "ajlskdfdfdfjaslfkj"
-        client_socket.send(f"ajlskdfdfdfjaslfkj".encode('utf-8'))
+        client_socket.send(f"gdkjwf;kja;flkjdf".encode('utf-8'))
         client_name = client_socket.recv(1024).decode('utf-8')
 
         #adding the client to dictionary
@@ -71,7 +70,7 @@ def connect_client():
 
         #informing the client
         client_socket.send(f"\nwelcome {clients[client_socket]}, you are connected to the server\n".encode('utf-8'))
-        broadcast(f"{clients[client_socket]} has joined the server".encode("utf-8"))
+        broadcast(f"\033[1;92m\n{clients[client_socket]} has joined the server[1;92m\n\033[0m".encode("utf-8"))
 
         #when a client connects to the server stat a thread
         receive_thread = threading.Thread(target=receive_message, args=(client_socket,))

@@ -8,11 +8,16 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((socket.gethostbyname(socket.gethostname()), 12345))
 
 def get_username():
-    message = client_socket.recv(1024).decode()
-    print("please enter your username: ", end="")
-    name = input()
-    client_socket.send(name.encode("utf-8"))
-    return 0
+    x=client_socket.recv(1024).decode("utf-8")
+    try:
+        if x == "gdkjwf;kja;flkjdf":
+            print("please enter your username: ", end="")
+            name = input()
+            client_socket.send(name.encode("utf-8"))
+            return 0
+    except:
+        client_socket.close()
+        return 0
 
 def send_message():
     """sending message to server"""
@@ -33,16 +38,7 @@ def receive_message():
         try:
             # receiving information from the server (buffer size is 1024)
             message = client_socket.recv(1024).decode("utf-8")
-
-            #name request
-            if message == "ajlskdfdfdfjaslfkj":
-                print("please enter your username: ",end="")
-                name = input()
-                client_socket.send(name.encode("utf-8"))
-                return 0
-            else:
-                print(message)
-
+            print(message)
         #if there was an error
         except:
             print("disconnected!")

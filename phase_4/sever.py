@@ -1,101 +1,143 @@
-import socket
-import threading
+# Import the required modules
+import socket     # For network communication (creating a server and connecting clients)
+import threading  # For handling multiple clients simultaneously using threads
 
-# Creating the server socket IPV4 (AF_INET) and TCP (SOCK_STREAM)
+
+# Create a TCP/IP socket using IPv4 addressing
+# AF_INET = IPv4, SOCK_STREAM = TCP (connection-based)
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# Bind the server to your computer ip and a desired port
+# Bind the socket to the local IP address and a port number (12345 in this case)
+# This allows the server to receive connections on this IP and port
 server_socket.bind((socket.gethostbyname(socket.gethostname()), 12345))
 
-# Put it on listen (for incoming connection)
+# Set the socket to listen mode to accept incoming connection requests
 server_socket.listen()
 
-# A dictionary for clients (stores both name and color)
+# Create an empty dictionary to store connected clients
+# Each client is associated with their socket and a tuple containing (name, color)
 clients = dict()
 
 
 def broadcast(message):
-    """Show the messages for everyone"""
+    """
+    Send a message to all connected clients.
+    This is used for public messages that should be seen by everyone.
+    """
     for client in clients.keys():
         try:
+            # Attempt to send the message to the client
             client.send(message)
         except:
-            # Remove broken connections
+            # If an error occurs (e.g., client disconnected), remove them from the list
             clients.pop(client)
 
 
 def receive_message(client_socket):
-    """Receive message from client"""
+    """
+    Continuously receive messages from a client.
+    If the message is '/exit', disconnect the client.
+    """
     while True:
+        # Extract the client address string (for display/logging)
         address = str(client_socket)[-26:-3]
         try:
-            # Receive the message from the client
+            # Receive data from the client (up to 1024 bytes) and decode it
             message = client_socket.recv(1024).decode("utf-8")
+
+            # If the client types '/exit', treat it as a disconnect request
             if message.lower() == "/exit":
                 raise Exception
 
-            # Get client info from dictionary
+            # Retrieve client's name and color from the dictionary
             client_name, client_color = clients[client_socket]
 
-            # Format: "username|color|message"
+            # Format the message with the client's name and color for UI rendering
             formatted_message = f"{client_name}|{client_color}|{message}"
+
+            # Send the message to all connected clients
             broadcast(formatted_message.encode("utf-8"))
 
         except:
-            # Name and color of client
+            # Handle client disconnection
             if client_socket in clients:
+                # Get client name and color
                 client_name, client_color = clients[client_socket]
-                # Remove the client from the dictionary
+
+                # Remove the client from the clients dictionary
                 clients.pop(client_socket)
-                # Close the connection for the client
+
+                # Close the client connection
                 client_socket.close()
-                # Let others know that the client left the server
+
+                # Notify all other clients that this client has left the chat
                 broadcast(f"{client_name}|{client_color}|has left the server".encode("utf-8"))
+
+                # Log the disconnection on the server side
                 print(f"{client_name} ({address}) has left the server.")
                 print("*" * 30)
             break
 
 
 def connect_client():
-    """Connecting to server"""
+    """
+    Wait for new client connections.
+    For each connection:
+    - Receive client's name and color
+    - Add them to the clients dictionary
+    - Notify others
+    - Start a new thread to receive messages from that client
+    """
     while True:
-        # Accept incoming connections
+        # Accept an incoming connection, returns a socket object and address
         client_socket, client_address = server_socket.accept()
+
+        # Log the new connection
         print(f"{client_address} has connected.")
         print("*" * 30)
 
         try:
-            # Request for client name and color
+            # Receive client's name and color preference, separated by '|'
             client_info = client_socket.recv(1024).decode('utf-8').split('|')
             client_name = client_info[0]
             client_color = client_info[1] if len(client_info) > 1 else "black"
 
-            # Validate color
+            # Define allowed colors
             valid_colors = ["black", "red", "green", "blue"]
+
+            # If color is not valid, assign default (black)
             if client_color not in valid_colors:
                 client_color = "black"
 
-            # Adding the client to dictionary
+            # Store client data in the dictionary
             clients.update({client_socket: (client_name, client_color)})
+
+            # Log client details on the server side
             print(f"client: {client_name} ({str(client_socket)[-27:-1]}) with color {client_color}")
             print("*" * 30)
 
-            # Informing the client
+            # Send a welcome message to the client
             client_socket.send(f"welcome {client_name}, you are connected to the server.".encode('utf-8'))
+
+            # Broadcast to everyone that a new client has joined
             broadcast(f"{client_name}|{client_color}|has joined the server".encode("utf-8"))
+
         except:
+            # If any error occurs during client info reception, disconnect them
             print(f"({str(client_socket)[-25:-2]}) has left the server.")
             print("*" * 30)
             continue
 
-        # When a client connects to the server start a thread
+        # Start a separate thread to handle incoming messages from this client
         receive_thread = threading.Thread(target=receive_message, args=(client_socket,))
         receive_thread.start()
 
 
-# Set up the server
+# Log that the server is ready and waiting for connections
 print()
 print("*" * 30)
 print("server is looking for connection...")
 print("*" * 30)
+
+# Start listening for client connections
 connect_client()

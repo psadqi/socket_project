@@ -364,8 +364,23 @@ class ChatWindow(QMainWindow):
             port_number = int(port_number)
             client_socket.connect((ip_address, port_number))
 
-            # Send username to server
-            client_socket.send(username.encode('utf-8'))
+            # Get selected color
+            color = "black"
+            if self.red_radio.isChecked():
+                color = "red"
+            elif self.green_radio.isChecked():
+                color = "green"
+            elif self.blue_radio.isChecked():
+                color = "blue"
+
+            # Disable color selection after connection
+            self.black_radio.setEnabled(False)
+            self.red_radio.setEnabled(False)
+            self.green_radio.setEnabled(False)
+            self.blue_radio.setEnabled(False)
+
+            # Send both username and color to server
+            client_socket.send(f"{username}|{color}".encode('utf-8'))
 
             # Start thread for receiving messages
             receive_thread = threading.Thread(target=self.receive_message)
@@ -391,6 +406,11 @@ class ChatWindow(QMainWindow):
             self.connect_button.setEnabled(True)
             self.disconnect_button.setEnabled(False)
             self.send_button.setEnabled(False)
+            # Re-enable color selection
+            self.black_radio.setEnabled(True)
+            self.red_radio.setEnabled(True)
+            self.green_radio.setEnabled(True)
+            self.blue_radio.setEnabled(True)
 
     def send_message(self):
         """Send message to server."""
@@ -416,13 +436,25 @@ class ChatWindow(QMainWindow):
         self.disconnect_from_server()
 
     def display_message(self, message):
-        """Display received message in chat display."""
+        """Display received message in chat display with proper coloring."""
+        # Enable HTML rendering
+        self.chat_display.setAcceptRichText(True)
+
+        # Parse the message format: "username|color|message"
+        if "|" in message:
+            parts = message.split("|", 2)
+            if len(parts) == 3:
+                username, color, msg = parts
+                html = f'<span style="color:{color}"><b>{username}:</b> {msg}</span>'
+                self.chat_display.append(html)
+                return
+
+        # Fallback for regular messages
         self.chat_display.append(message)
 
 
-if __name__ == "__main__":
-    app = QApplication([])
-    app.setStyle("Fusion")
-    window = ChatWindow()
-    window.show()
-    app.exec()
+app = QApplication([])
+app.setStyle("fusion")
+window = ChatWindow()
+window.show()
+app.exec()

@@ -31,7 +31,7 @@ def receive_message(client_socket):
             message = client_socket.recv(1024).decode("utf-8")
             if message.lower() == "/exit":
                 raise Exception
-            message = f"\033[1;34m\n\t{clients[client_socket]} ({address}): {message}\n\033[0m".encode("utf-8")
+            message = f"\n\t{clients[client_socket]} ({address}): {message}\n".encode("utf-8")
             #show the message to everyone
             broadcast(message)
         except:
@@ -42,7 +42,7 @@ def receive_message(client_socket):
             #close the connection for the client
             client_socket.close()
             #let others know that the client left the server
-            broadcast(f"\033[1;31m\n\t{name} ({address}) has left the server!\n\033[0m".encode("utf-8"))
+            broadcast(f"\n\t{name} ({address}) has left the server!\n".encode("utf-8"))
             print(f"{name} ({address}) has left the server.")
             print("*" * 30)
             break
@@ -60,7 +60,6 @@ def connect_client():
         try:
 
             #request for client name
-            client_socket.send(f"username".encode('utf-8'))
             client_name = client_socket.recv(1024).decode('utf-8')
 
             #adding the client to dictionary
@@ -71,8 +70,8 @@ def connect_client():
                 print("*" * 30)
 
                 #informing the client
-                client_socket.send(f"\nwelcome {clients[client_socket]}, you are connected to the server.\n".encode('utf-8'))
-                broadcast(f"\033[1;92m\n{clients[client_socket]} has joined the server.\n\033[0m".encode("utf-8"))
+                client_socket.send(f"welcome {clients[client_socket]}, you are connected to the server.\n".encode('utf-8'))
+                broadcast(f"\n{clients[client_socket]} has joined the server.\n".encode("utf-8"))
             else:
                 raise Exception
 

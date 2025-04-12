@@ -1,50 +1,72 @@
-from PyQt6 import QtCore, QtGui, QtWidgets
-from PyQt6.QtGui import QIcon
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QGroupBox, QLabel, QLineEdit, \
+    QPushButton, QRadioButton, QTextEdit, QGridLayout, QMessageBox
+from PyQt6.QtGui import QIcon, QIntValidator
+
+import socket
+import sys
+import threading
+
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 
-class ChatWindowUI:
-    """Modern chat application UI with text color options and right-aligned buttons."""
+def receive_message():
+    """receiving message from server"""
+    while True:
+        #we need a try except so that our program doesn't crash
+        try:
+            # receiving information from the server (buffer size is 1024)
+            message = client_socket.recv(1024).decode("utf-8")
+            return message
+        #if there was an error
+        except:
+            client_socket.close()
+            break
 
-    def setup_ui(self, main_window):
+
+def send_message(message):
+    """sending message to server"""
+    while True:
+        #getting the message and send it
+        if message == "/exit":
+            client_socket.close()
+            break
+        client_socket.send(message.encode("utf-8"))
+
+
+class ChatWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+
+        # Configure main window properties
+        self.setWindowTitle("Chat Application")
+        self.setWindowIcon(QIcon("icon.png"))
+        self.setFixedSize(650, 700)
+
+        # Initialize UI components
+        self.init_ui()
+
+    def init_ui(self):
         """Initialize and setup all UI components."""
-        self.setup_main_window(main_window)
-        self.set_icons(main_window)  # Add this line
+        self.setup_main_window()
         self.create_connection_panel()
         self.create_chat_display()
         self.create_message_input()
-        self.retranslate_ui(main_window)
-        QtCore.QMetaObject.connectSlotsByName(main_window)
+        self.apply_styles()
 
-    def set_icons(self, main_window):
-        """Set application and window icons."""
-        # Set application icon (shown in taskbar/dock)
-        app_icon = QtGui.QIcon("icon.png")  # Replace with your icon path
-        QtWidgets.QApplication.setWindowIcon(app_icon)
-
-        # Set window icon (shown in title bar)
-        main_window.setWindowIcon(app_icon)
-
-    def setup_main_window(self, main_window):
+    def setup_main_window(self):
         """Configure main window properties."""
-        main_window.setObjectName("ChatWindow")
-        main_window.resize(800, 600)
-        main_window.setWindowTitle("Chat Application")
-
         # Central widget and main layout
-        self.central_widget = QtWidgets.QWidget(parent=main_window)
+        self.central_widget = QWidget(self)
         self.central_widget.setObjectName("centralWidget")
-        main_window.setCentralWidget(self.central_widget)
+        self.setCentralWidget(self.central_widget)
 
-        self.main_layout = QtWidgets.QVBoxLayout(self.central_widget)
+        self.main_layout = QVBoxLayout(self.central_widget)
         self.main_layout.setContentsMargins(10, 10, 10, 10)
         self.main_layout.setSpacing(10)
 
-        # Apply modern styling
-        self.set_stylesheet(main_window)
-
-    def set_stylesheet(self, main_window):
+    def apply_styles(self):
         """Apply a modern stylesheet to the application."""
-        main_window.setStyleSheet("""
+        self.setStyleSheet("""
             /* Main window styling */
             QWidget {
                 background-color: #f5f5f5;
@@ -90,7 +112,7 @@ class ChatWindowUI:
 
             /* Buttons */
             QPushButton {
-                background-color: #4CAF50;
+                background-color: #df3131;
                 color: white;
                 border: none;
                 padding: 8px 16px;
@@ -100,7 +122,7 @@ class ChatWindowUI:
             }
 
             QPushButton:hover {
-                background-color: #0f972e;
+                background-color: #a81818;
             }
 
             QPushButton:pressed {
@@ -172,23 +194,25 @@ class ChatWindowUI:
 
     def create_connection_panel(self):
         """Create the connection settings panel with right-aligned buttons."""
-        connection_group = QtWidgets.QGroupBox("Connection Settings")
-        connection_layout = QtWidgets.QGridLayout()
+        connection_group = QGroupBox("Connection Settings")
+        connection_layout = QGridLayout()
 
         # Server address
-        self.server_label = QtWidgets.QLabel("Server:")
-        self.server_input = QtWidgets.QLineEdit()
-        self.server_input.setPlaceholderText("Server IP")
+        self.server_label = QLabel("Server IP:")
+        self.server_input = QLineEdit()
+        self.server_input.setText(f"{socket.gethostbyname(socket.gethostname())}")
+        self.server_input.setPlaceholderText(f"{socket.gethostbyname(socket.gethostname())}")
 
         # Port
-        self.port_label = QtWidgets.QLabel("Port:")
-        self.port_input = QtWidgets.QLineEdit()
+        self.port_label = QLabel("Port:")
+        self.port_input = QLineEdit()
+        self.port_input.setText("12345")
         self.port_input.setPlaceholderText("12345")
-        self.port_input.setValidator(QtGui.QIntValidator(1, 65535))
+        self.port_input.setValidator(QIntValidator(1, 65535))
 
         # Username
-        self.username_label = QtWidgets.QLabel("Username:")
-        self.username_input = QtWidgets.QLineEdit()
+        self.username_label = QLabel("Username:")
+        self.username_input = QLineEdit()
         self.username_input.setPlaceholderText("Enter username")
 
         # Add widgets to layout
@@ -200,23 +224,23 @@ class ChatWindowUI:
         connection_layout.addWidget(self.username_input, 1, 1, 1, 3)
 
         # Text color radio buttons (left side)
-        self.text_color_label = QtWidgets.QLabel("Text Color:")
+        self.text_color_label = QLabel("Text Color:")
 
-        self.black_radio = QtWidgets.QRadioButton("Black")
+        self.black_radio = QRadioButton("Black")
         self.black_radio.setObjectName("blackRadio")
         self.black_radio.setChecked(True)
 
-        self.red_radio = QtWidgets.QRadioButton("Red")
+        self.red_radio = QRadioButton("Red")
         self.red_radio.setObjectName("redRadio")
 
-        self.green_radio = QtWidgets.QRadioButton("Green")
+        self.green_radio = QRadioButton("Green")
         self.green_radio.setObjectName("greenRadio")
 
-        self.blue_radio = QtWidgets.QRadioButton("Blue")
+        self.blue_radio = QRadioButton("Blue")
         self.blue_radio.setObjectName("blueRadio")
 
         # Color selection layout (left-aligned)
-        color_layout = QtWidgets.QHBoxLayout()
+        color_layout = QHBoxLayout()
         color_layout.addWidget(self.text_color_label)
         color_layout.addWidget(self.black_radio)
         color_layout.addWidget(self.red_radio)
@@ -225,25 +249,63 @@ class ChatWindowUI:
         color_layout.addStretch()  # Push everything to the left
 
         # Action buttons (right-aligned)
-        self.connect_button = QtWidgets.QPushButton("Connect")
-        self.disconnect_button = QtWidgets.QPushButton("Disconnect")
-        self.disconnect_button.setStyleSheet("""
-            QPushButton {
+        self.connect_button = QPushButton("Connect")
+        self.connect_button.setStyleSheet("""QPushButton {
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 4px;
+                min-width: 80px;
+                font-weight: bold;
+            }
+
+            QPushButton:hover {
+                background-color: #0f972e;
+            }
+
+            QPushButton:pressed {
+                background-color: #3d8b40;
+            }
+
+            QPushButton:disabled {
+                background-color: #cccccc;
+                color: #888888;
+            }""")
+        self.disconnect_button = QPushButton("Disconnect")
+        self.disconnect_button.setStyleSheet("""QPushButton {
                 background-color: #df3131;
                 color: white;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 4px;
+                min-width: 80px;
+                font-weight: bold;
             }
+
             QPushButton:hover {
                 background-color: #a81818;
             }
-        """)
 
-        button_layout = QtWidgets.QHBoxLayout()
+            QPushButton:pressed {
+                background-color: #3d8b40;
+            }
+
+            QPushButton:disabled {
+                background-color: #cccccc;
+                color: #888888;
+            }""")
+
+        self.connect_button.clicked.connect(
+            lambda: self.start_connection(self.server_input.text(), self.port_input.text(),self.username_input.text()))
+
+        button_layout = QHBoxLayout()
         button_layout.addStretch()  # Push buttons to the right
         button_layout.addWidget(self.connect_button)
         button_layout.addWidget(self.disconnect_button)
 
         # Combine both layouts in a container
-        bottom_row_layout = QtWidgets.QHBoxLayout()
+        bottom_row_layout = QHBoxLayout()
         bottom_row_layout.addLayout(color_layout)
         bottom_row_layout.addLayout(button_layout)
 
@@ -254,10 +316,10 @@ class ChatWindowUI:
 
     def create_chat_display(self):
         """Create the chat message display area."""
-        chat_group = QtWidgets.QGroupBox("Chat Messages")
-        chat_layout = QtWidgets.QVBoxLayout()
+        chat_group = QGroupBox("Chat Messages")
+        chat_layout = QVBoxLayout()
 
-        self.chat_display = QtWidgets.QTextEdit()
+        self.chat_display = QTextEdit()
         self.chat_display.setReadOnly(True)
         self.chat_display.setStyleSheet("""
             QTextEdit {
@@ -275,13 +337,13 @@ class ChatWindowUI:
 
     def create_message_input(self):
         """Create the message input area."""
-        input_group = QtWidgets.QGroupBox("Send Message")
-        input_layout = QtWidgets.QHBoxLayout()
+        input_group = QGroupBox("Send Message")
+        input_layout = QHBoxLayout()
 
-        self.message_input = QtWidgets.QLineEdit()
+        self.message_input = QLineEdit()
         self.message_input.setPlaceholderText("Type your message here...")
 
-        self.send_button = QtWidgets.QPushButton("Send")
+        self.send_button = QPushButton("Send")
         self.send_button.setStyleSheet("""QPushButton {
                 background-color: #3ac1ec;
                 color: white;
@@ -301,24 +363,22 @@ class ChatWindowUI:
         input_group.setLayout(input_layout)
         self.main_layout.addWidget(input_group)
 
-    def retranslate_ui(self, main_window):
-        """Set text for UI elements (for translation purposes)."""
-        _translate = QtCore.QCoreApplication.translate
-        main_window.setWindowTitle(_translate("ChatWindow", "Chat room"))
+    def start_connection(self, ip_address, port_number, username):
+        # connecting to the server with specified ip address (your computer ip) and port number
+        if len(username) == 0 or len(ip_address) == 0 or len(port_number) == 0:
+            QMessageBox.warning(self, "Warning", "Please fill the fields.")
+            return
+        port_number = int(port_number)
+        client_socket.connect((ip_address, port_number))
+        if receive_message() == "username":
+            send_message(username)
 
 
 if __name__ == "__main__":
-    import sys
-
-    app = QtWidgets.QApplication(sys.argv)
-
-    # Set application-wide style
+    app = QApplication([])
     app.setStyle("Fusion")
 
-    # Create and show window
-    window = QtWidgets.QMainWindow()
-    ui = ChatWindowUI()
-    ui.setup_ui(window)
+    window = ChatWindow()
     window.show()
 
-    sys.exit(app.exec())
+    app.exec()

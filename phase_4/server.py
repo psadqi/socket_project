@@ -1,3 +1,4 @@
+
 # Import the required modules
 import socket     # For network communication (creating a server and connecting clients)
 import threading  # For handling multiple clients simultaneously using threads
@@ -19,8 +20,12 @@ server_socket.listen()
 clients = dict()
 
 # Add near the clients dictionary (Page 1)
-username_to_socket = {}  # Maps usernames to their sockets
+username_to_socket = dict()  # Maps usernames to their sockets
 
+# Add this to server.py
+def get_connected_clients():
+    """Return formatted string of connected clients"""
+    return "\n".join([f"{name} (Color: {color})" for _, (name, color) in clients.items()])
 
 def broadcast(message):
     """
@@ -98,6 +103,8 @@ def receive_message(client_socket):
                 # Log the disconnection on the server side
                 print(f"{client_name} ({address}) has left the server.")
                 print("*" * 30)
+                print(get_connected_clients())
+                print("*" * 30)
             break
 
 
@@ -150,6 +157,8 @@ def connect_client():
         except:
             # If any error occurs during client info reception, disconnect them
             print(f"({str(client_socket)[-25:-2]}) has left the server.")
+            print("*" * 30)
+            print(get_connected_clients())
             print("*" * 30)
             continue
 

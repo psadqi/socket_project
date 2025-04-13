@@ -7,6 +7,7 @@ from PyQt6.QtCore import pyqtSignal, QObject  # For custom signals and QObject b
 # Import standard library modules
 import socket  # For network communication
 import threading  # For running network operations in separate threads
+from datetime import datetime
 
 # Create a TCP socket for client-server communication
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -36,7 +37,7 @@ class ChatWindow(QMainWindow):
         # Configure main window properties
         self.setWindowTitle("Chat Application")  # Window title
         self.setWindowIcon(QIcon("icon.png"))  # Window icon (assuming icon.png exists)
-        self.setFixedSize(650, 700)  # Fixed window size
+        self.setFixedSize(550, 600)  # Fixed window size
 
         # Initialize all UI components
         self.init_ui()
@@ -426,6 +427,9 @@ class ChatWindow(QMainWindow):
             self.red_radio.setEnabled(False)
             self.green_radio.setEnabled(False)
             self.blue_radio.setEnabled(False)
+            self.username_input.setEnabled(False)
+            self.server_input.setEnabled(False)
+            self.port_input.setEnabled(False)
 
             # Send username and color to server (separated by pipe)
             client_socket.send(f"{username}|{color}".encode('utf-8'))
@@ -496,25 +500,29 @@ class ChatWindow(QMainWindow):
         self.disconnect_from_server()
 
     def display_message(self, message):
-        """
-        Display received message in chat display with proper formatting.
-        Handles both regular messages and formatted messages (username|color|message).
-        """
-        # Enable HTML rendering for rich text formatting
         self.chat_display.setAcceptRichText(True)
 
-        # Check for formatted messages (username|color|message)
+        # Handle private messages (format: "[PM from someone] Hello")
+        if message.startswith("[PM from "):
+            sender = message.split("]")[0][9:]
+            msg = message.split("]")[1].strip()
+            html = f'<span style="color:purple"><b>[Private from {sender}]:</b> {msg}</span> ({datetime.now().strftime("%H:%M")})'
+            self.chat_display.append(html)
+            return
+
+        # Replace newlines with HTML line breaks (<br>)
+        message = message.replace("\n", "<br>")
+
         if "|" in message:
             parts = message.split("|", 2)
             if len(parts) == 3:
                 username, color, msg = parts
-                # Format message with colored username
-                html = f'<span style="color:{color}"><b>{username}:</b> {msg}</span>'
+                html = f'<span style="color:{color}"><b>{username}:</b> {msg}</span> ({datetime.now().strftime("%H:%M")})'
                 self.chat_display.append(html)
                 return
 
-        # Fallback for regular messages
-        self.chat_display.append(message)
+        # Ensure plain text messages use HTML for proper line breaks
+        self.chat_display.append(f"<pre>{message}</pre>")  # <pre> preserves formatting
 
 
 # Create QApplication instance

@@ -1,7 +1,7 @@
 # Import the required modules
 import socket     # For network communication (creating a server and connecting clients)
 import threading  # For handling multiple clients simultaneously using threads
-
+from datetime import datetime
 
 # Create a TCP/IP socket using IPv4 addressing
 # AF_INET = IPv4, SOCK_STREAM = TCP (connection-based)
@@ -17,6 +17,9 @@ server_socket.listen()
 # Create an empty dictionary to store connected clients
 # Each client is associated with their socket and a tuple containing (name, color)
 clients = dict()
+
+# Add near the clients dictionary (Page 1)
+username_to_socket = {}  # Maps usernames to their sockets
 
 
 def broadcast(message):
@@ -44,6 +47,25 @@ def receive_message(client_socket):
         try:
             # Receive data from the client (up to 1024 bytes) and decode it
             message = client_socket.recv(1024).decode("utf-8")
+
+            # Handle private messages (format: "/pm <username> <message>")
+            if message.startswith("/pm "):
+                parts = message.split(" ", 2)  # Split into ["/pm", "username", "message"]
+                if len(parts) == 3:
+                    target_username, pm_content = parts[1], parts[2]
+                    sender_name, _ = clients[client_socket]
+
+                    # Send PM only to the target user
+                    if target_username in username_to_socket:
+                        target_socket = username_to_socket[target_username]
+                        target_socket.send(
+                            f"[PM from {sender_name}] {pm_content}".encode("utf-8")
+                        )
+                        # Optional: Confirm delivery to sender
+                        client_socket.send(f'{sender_name}: {pm_content} ({datetime.now().strftime("%H:%M")})'.encode("utf-8"))
+                    else:
+                        client_socket.send(f"User '{target_username}' not found.".encode("utf-8"))
+                continue
 
             # If the client types '/exit', treat it as a disconnect request
             if message.lower() == "/exit":
@@ -102,8 +124,11 @@ def connect_client():
             client_name = client_info[0]
             client_color = client_info[1] if len(client_info) > 1 else "black"
 
+            # Add to username-to-socket mapping
+            username_to_socket[client_name] = client_socket
+
             # Define allowed colors
-            valid_colors = ["black", "red", "green", "blue"]
+            valid_colors = ("black", "red", "green", "blue")
 
             # If color is not valid, assign default (black)
             if client_color not in valid_colors:
@@ -113,11 +138,11 @@ def connect_client():
             clients.update({client_socket: (client_name, client_color)})
 
             # Log client details on the server side
-            print(f"client: {client_name} ({str(client_socket)[-27:-1]}) with color {client_color}")
+            print(f"client: {client_name} {str(client_socket)[-27:-1]} with color {client_color}")
             print("*" * 30)
 
             # Send a welcome message to the client
-            client_socket.send(f"welcome {client_name}, you are connected to the server.".encode('utf-8'))
+            client_socket.send(f"welcome {client_name}\n".encode('utf-8'))
 
             # Broadcast to everyone that a new client has joined
             broadcast(f"{client_name}|{client_color}|has joined the server".encode("utf-8"))

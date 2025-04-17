@@ -45,9 +45,9 @@ This project uses only built-in Python modules. No additional packages are neede
 
 ---
 
-![Alt text](phase_2-1.png)
-
 ## ▶️ How to Run
+
+![Screenshot](phase_2-1.png)
 
 ### 🟢 Start the Server
 

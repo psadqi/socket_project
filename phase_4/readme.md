@@ -63,6 +63,10 @@ pip install PyQt6
 
 ### ▶️ Run Instructions
 
+![Alt text](<phase_4 server-1.png>)
+
+![Alt text](<phase_4 clients-1.png>)
+
 1. **Start the Server:**
 ```bash
 python server.py

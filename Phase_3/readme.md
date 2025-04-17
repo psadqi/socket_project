@@ -16,6 +16,8 @@ This project uses the following built-in Python modules:
 
 ### Running the Application
 
+![Alt text](phase_3-1.png)
+
 1. **Start the Server**: 
    - Run the server script (`server.py`). The server will begin listening for incoming client connections.
 

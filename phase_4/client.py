@@ -2,7 +2,7 @@
 # Import necessary PyQt6 modules for GUI components
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QGroupBox, QLabel, QLineEdit, \
     QPushButton, QRadioButton, QTextEdit, QGridLayout, QMessageBox
-from PyQt6.QtGui import QIcon, QIntValidator  # For icons and input validation
+from PyQt6.QtGui import QIcon, QIntValidator, QFont  # For icons and input validation
 from PyQt6.QtCore import pyqtSignal, QObject  # For custom signals and QObject base class
 
 # Import standard library modules
@@ -270,7 +270,7 @@ class ChatWindow(QMainWindow):
             border: none;
             padding: 8px 16px;
             border-radius: 4px;
-            min-width: 80px;
+            min-width: 55px;
             font-weight: bold;
         }
 
@@ -293,9 +293,9 @@ class ChatWindow(QMainWindow):
             background-color: #df3131;
             color: white;
             border: none;
-            padding: 8px 16px;
+            padding: 8px 12px;
             border-radius: 4px;
-            min-width: 80px;
+            min-width: 55px;
             font-weight: bold;
         }
 

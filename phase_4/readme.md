@@ -68,13 +68,12 @@ pip install PyQt6
 ![Alt text](<phase_4 clients-1.png>)
 
 1. **Start the Server:**
-```bash
-python server.py
-```
+
+open ChatServer.exe
 
 2. **Start the Client:**
 
-just open the client.exe
+just open the ChatClient.exe
 
 3. **Connect & Chat:**
    - Enter your **username** and select a **color**.

@@ -73,9 +73,8 @@ python server.py
 ```
 
 2. **Start the Client:**
-```bash
-python client.py
-```
+
+just open the client.exe
 
 3. **Connect & Chat:**
    - Enter your **username** and select a **color**.

@@ -1,4 +1,4 @@
-('C:\\Users\\Pouya\\Desktop\\study\\socket_programming\\phase_4\\build\\client\\PYZ-00.pyz',
+('C:\\Users\\Pouya\\Desktop\\study\\socket_programming\\phase_4\\src\\build\\client\\PYZ-00.pyz',
  [('PyQt6',
    'C:\\Users\\Pouya\\AppData\\Roaming\\Python\\Python311\\site-packages\\PyQt6\\__init__.py',
    'PYMODULE'),

@@ -4,31 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="42a148f3-8c4d-43b3-999c-1476a7e3ac54" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/phase_4.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/build/client/Analysis-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/build/client/EXE-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/build/client/PKG-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/build/client/PYZ-00.pyz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/build/client/PYZ-00.toc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/build/client/base_library.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/build/client/client.pkg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/build/client/generated-a3ac78b83928b1cc0a58dcf61d47a04d137c8382b78a81127f4ac142a17fb8a1.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/build/client/warn-client.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/build/client/xref-client.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/client.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/client.spec" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/dist/client.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.py" beforeDir="false" />
-    </list>
+    <list default="true" id="42a148f3-8c4d-43b3-999c-1476a7e3ac54" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -52,7 +28,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "master",
-    "last_opened_file_path": "C:/Users/Pouya/Desktop/study/socket_programming/phase_4",
+    "last_opened_file_path": "C:/Users/Pouya/Desktop/study/software/src",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -82,6 +58,7 @@
       <workItem from="1745089900652" duration="220000" />
       <workItem from="1745090390662" duration="198000" />
       <workItem from="1745090729604" duration="607000" />
+      <workItem from="1745091870703" duration="17000" />
     </task>
     <servers />
   </component>
